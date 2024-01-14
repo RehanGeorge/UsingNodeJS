@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jokester</title>
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <div class="centerer">
+        <div class="container">
+            <h1>Want to hear a joke?</h1>
+            <form id="jokester" method="post">
+                <button type="submit" formaction="/get-joke">Yes!</button>
+                <button type="submit" formaction="/sleep">No!</button>
+            </form>
+            <div id="joke">
+                <h2><%= content %></h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
