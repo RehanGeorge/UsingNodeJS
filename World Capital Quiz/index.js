@@ -9,28 +9,21 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "world",
-  password: process.env.db_password,
+  password: "123456",
   port: 5432,
 });
 
 db.connect();
 
-/*
+let quiz = [
+  { country: "France", capital: "Paris" },
+  { country: "United Kingdom", capital: "London" },
+  { country: "United States of America", capital: "New York" },
+];
+
 db.query("SELECT * FROM capitals", (err, res) => {
   if (err) {
-    console.error(err);
-  } else {
-    quiz = res.rows;
-  }
-  db.end();
-});
-*/
-
-let quiz = {};
-
-db.query("SELECT * FROM flags", (err, res) => {
-  if (err) {
-    console.error(err);
+    console.error("Error executing query", err.stack);
   } else {
     quiz = res.rows;
   }
@@ -46,9 +39,9 @@ app.use(express.static("public"));
 let currentQuestion = {};
 
 // GET home page
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   totalCorrect = 0;
-  nextQuestion();
+  await nextQuestion();
   console.log(currentQuestion);
   res.render("index.ejs", { question: currentQuestion });
 });
@@ -57,7 +50,7 @@ app.get("/", (req, res) => {
 app.post("/submit", (req, res) => {
   let answer = req.body.answer.trim();
   let isCorrect = false;
-  if (currentQuestion.name.toLowerCase() === answer.toLowerCase()) {
+  if (currentQuestion.capital.toLowerCase() === answer.toLowerCase()) {
     totalCorrect++;
     console.log(totalCorrect);
     isCorrect = true;
@@ -71,8 +64,9 @@ app.post("/submit", (req, res) => {
   });
 });
 
-function nextQuestion() {
+async function nextQuestion() {
   const randomCountry = quiz[Math.floor(Math.random() * quiz.length)];
+
   currentQuestion = randomCountry;
 }
 
