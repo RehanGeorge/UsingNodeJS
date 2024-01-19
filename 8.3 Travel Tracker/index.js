@@ -15,24 +15,23 @@ const db = new pg.Client({
 
 db.connect();
 
-let total = 0;
-let countries = 0;
+async function checkVisited() {
+  const result = await db.query("SELECT country_code FROM visited_countries");
 
-db.query("SELECT * FROM visited_countries", (err, res) => {
-  if (err) {
-    console.error(err);
-  } else {
-    countries = res.rows.map((row) => row.country_code);
-    total = countries.length;
-  }
-});
+  const countries = result.rows.map((country) => country.country_code);
+  return countries;
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // GET home page - TODO Implement function to checkVisited countries
 app.get("/", async (req, res) => {
-  res.render("index.ejs", { countries: countries, total: total });
+  const map_countries = await checkVisited();
+  res.render("index.ejs", {
+    countries: map_countries,
+    total: map_countries.length,
+  });
 });
 
 // INSERT new country
