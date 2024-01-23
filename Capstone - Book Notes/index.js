@@ -15,11 +15,14 @@ const db = new pg.Client({
 
 db.connect();
 
-const test = await db.query("SELECT * FROM book");
-console.log(test.rows);
+const books = await db.query("SELECT * FROM book");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("index.ejs", { books: books.rows });
+});
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
