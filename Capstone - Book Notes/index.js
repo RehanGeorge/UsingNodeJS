@@ -16,6 +16,7 @@ const db = new pg.Client({
 db.connect();
 
 const books = await db.query("SELECT * FROM book");
+console.log(books.rows);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));

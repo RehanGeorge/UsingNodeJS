@@ -1,3 +1,8 @@
 <%- include ('partials/header.ejs'); %>
 <h1>Hello</h1>
+<% books.forEach(element => { %>
+    <h2><%= element.title %></h2>
+    <p><%= element.notes %></p>
+    <p><%= element.rating %> / 10</p>
+<% }); %>
 </main>
